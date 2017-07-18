@@ -12,5 +12,30 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    return view('index');
+});
+
+
+/*
+Route::get('/env', function () {
+    return App::environment();;
+});*/
+Auth::routes();
+
+Route::group(['middleware' => ['auth']], function() {
+
+    Route::get('/home', 'HomeController@index')->name('home');
+
+    Route::resource('/menu', 'Development\MenuController');
+    Route::resource('/permission', 'Development\PermissionController');
+
+    Route::get('/setting', 'Setting\SettingController@index');
+    Route::post('/setting', 'Setting\SettingController@update');
+    Route::resource('/role', 'Setting\RoleController');
+    Route::resource('/user', 'Setting\UserController');
+    Route::get('/profile', 'Setting\ProfileController@index');
+    Route::patch('/profile', 'Setting\ProfileController@update');
+
+    Route::any('/logout', 'Auth\LoginController@logout');
 });
